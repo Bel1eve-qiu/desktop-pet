@@ -30,6 +30,11 @@ PAD_SIDE = "#b3b9c2"
 
 TILT_DEG = 9.0        # 键盘倾斜角度，改这个数就能调斜度
 
+# 肩膀位置（相对身体中心，未缩放）。身体半宽 70、下缘 +50，
+# 所以 52 落在身体外侧靠肩的位置，-6 在肚子上方，胳膊才像从肩膀长出来。
+SHOULDER_X = 52.0
+SHOULDER_Y = -6.0
+
 
 def _rr_pts(x0, y0, x1, y1, r):
     """圆角矩形的顶点序列（扁平 x,y 列表）。"""
@@ -273,13 +278,17 @@ def draw_cat(canvas, cx, cy, s=1.0, left=0.0, right=0.0, look_x=0.0,
             # 落点来自倾斜后的键面，抬起时垂直离开台面
             bx, by = kb["left" if side == -1 else "right"]
             px, py = bx, by - 30 * s * amt
-        # 手臂
-        canvas.create_line(cx + sd * 30 * s, cy + 20 * s, px, py,
+        # 手臂：根部落在肩膀（身体上缘偏外侧），不是肚皮正中。
+        # 之前根部在 (±30, +20)，水平只到身体半宽的 4 成、垂直又在肚子下缘，
+        # 看着就是两条胳膊从肚皮里钻出来。
+        shx = cx + sd * SHOULDER_X * s
+        shy = cy + SHOULDER_Y * s
+        canvas.create_line(shx, shy, px, py,
                            width=int(13 * s) or 1, capstyle="round",
                            fill=FUR, joinstyle="round")
-        canvas.create_line(cx + sd * 30 * s, cy + 20 * s, px, py,
-                           width=int(13 * s) or 1, capstyle="round",
-                           fill=FUR, joinstyle="round")
+        # 肩关节：盖住手臂和身体的接缝，让连接处圆润过渡
+        canvas.create_oval(shx - 9 * s, shy - 9 * s, shx + 9 * s, shy + 9 * s,
+                           fill=FUR, outline="")
         # 爪垫
         canvas.create_oval(px - 15 * s, py - 11 * s, px + 15 * s, py + 11 * s,
                            fill=FUR, outline=OUTLINE, width=max(1, int(2 * s)))
