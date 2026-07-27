@@ -13,12 +13,6 @@ python bongocat.py
 
 或者双击 `启动BongoCat.bat`（用 pythonw 启动，不留黑窗口）。
 
-仓库里还有一个早期的通用桌宠版本 `pet.py`，是会自己溜达、跳跃、睡觉的状态机版：
-
-```bash
-python pet.py
-```
-
 ## 它会做什么
 
 - **敲键盘**：你按左半区的键左爪落下，右半区右爪落下，键盘上对应的键会亮起并下沉
@@ -45,7 +39,6 @@ bongo/
   inputs.py        全局键鼠监听、打字热度、光标归一化
   winapi.py        Win32 调用封装（置顶、穿透、透明色）
   config.py        配置读写
-pet.py, sprite.py  早期通用桌宠版本（独立可运行）
 ```
 
 想改外观，配色常量都在 `bongo/cat.py` 顶部；桌面倾斜角度是同一个文件里的 `TILT_DEG`，改一处键盘、垫子、鼠标一起转。
